@@ -264,6 +264,11 @@ describe('bridge server (real shell)', () => {
             });
             setTimeout(() => ws.send(JSON.stringify({ type: 'input', data: `echo KOTERMINAL_""E2E_OK\r` })), 1500);
             await seen;
+            // Let the shell end itself. Killing it would make node-pty (Windows) fork a console-list helper that fails
+            // without a console (CI) and is then reported by the test runner as a failure of this file.
+            ws.send(JSON.stringify({ type: 'input', data: 'exit\r' }));
+            await box.next('exit');
+            assert.equal(bridge.sessionCount(), 0);
             ws.close();
             await closed(ws);
         } finally {

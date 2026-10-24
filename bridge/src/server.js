@@ -25,6 +25,20 @@ function rejectUpgrade(socket, status, text) {
     socket.destroy();
 }
 
+/**
+ * Windows: when a shell ends by itself, node-pty 1.1.0 closes its sockets but never disposes the conout worker thread
+ * (only kill() does), so every `exit` typed in a terminal would leak a thread in the long-running bridge. kill() is no
+ * substitute after an exit: it forks a console-list helper that fails for a process that is already gone. Dispose the
+ * worker directly; a later node-pty without this field makes it a no-op.
+ */
+function releaseExitedPty(pty) {
+    try {
+        pty._agent?._conoutSocketWorker?.dispose?.();
+    } catch {
+        /* already released */
+    }
+}
+
 function workingDirectory(requested, fs, home) {
     if (requested && path.isAbsolute(requested)) {
         try {
@@ -168,6 +182,7 @@ export function createBridgeServer({
                 sessions.delete(pty);
                 state.pty = null;
                 clearTimeout(state.drainTimer);
+                if (platform === 'win32') releaseExitedPty(pty);
                 send(ws, { type: 'exit', code: exitCode, signal: signal ?? null });
             });
             send(ws, { type: 'opened', shell: shell.id, pid: pty.pid });
