@@ -1,0 +1,6 @@
+node_modules/
+bridge/node_modules/
+release/
+e2e-output/
+*.log
+.DS_Store

@@ -1,0 +1,26 @@
+{
+    "name": "koterminal-bridge",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Local terminal bridge for the KoTerminal KoBar plugin: real shells (node-pty) over a token-protected WebSocket on 127.0.0.1.",
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+        "koterminal-bridge": "src/cli.js"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "start": "node src/cli.js",
+        "token": "node src/cli.js --show-token",
+        "rotate-token": "node src/cli.js --rotate-token",
+        "autostart:install": "node src/cli.js --install-autostart",
+        "autostart:remove": "node src/cli.js --remove-autostart",
+        "test": "node --test \"test/**/*.test.js\""
+    },
+    "dependencies": {
+        "node-pty": "1.1.0",
+        "ws": "^8.22.0"
+    }
+}
