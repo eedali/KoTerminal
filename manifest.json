@@ -11,5 +11,9 @@
     "githubRepo": "eedali/KoTerminal",
     "minAppVersion": "1.4.0",
     "languages": ["en", "tr"],
-    "versionNote": "First release: xterm.js terminal panel with tabs, settings and the KoTerminal bridge."
+    "versionNote": "First release: xterm.js terminal panel with tabs, settings and the KoTerminal bridge.",
+    "bar": {
+        "tile": { "sensitive": false },
+        "defaultSize": "icon"
+    }
 }
