@@ -56,7 +56,27 @@
       launcherClear: "Remove",
       launcherNone: "Not set",
       saved: "Saved",
-      shortcuts: "Shortcuts in the terminal: Ctrl+Shift+T new terminal, Ctrl+Shift+W close, Ctrl+Shift+C copy, Ctrl+V paste."
+      shortcuts: "Shortcuts in the terminal: Ctrl+Shift+T new terminal, Ctrl+Shift+W close, Ctrl+Shift+C copy, Ctrl+V paste.",
+      tileCaption: "Term",
+      tileSub: "open",
+      tileLabelOpen: "Terminal, {count} open",
+      tileLabelNone: "Terminal, none open",
+      tileLabelOffline: "Terminal, bridge not reachable",
+      subSetup: "Not set up yet",
+      subOffline: "Bridge not running",
+      subAuth: "Token refused",
+      subCount: "{count} open",
+      stRunning: "Running",
+      stExited: "Exited",
+      stFailed: "Failed",
+      stConnecting: "Connecting",
+      cardConnection: "Connection",
+      cardTerminal: "Terminal",
+      scTitle: "Shortcuts in the terminal",
+      scNew: "New terminal",
+      scClose: "Close terminal",
+      scCopy: "Copy",
+      scPaste: "Paste"
     },
     tr: {
       name: "Terminal",
@@ -110,7 +130,27 @@
       launcherClear: "Kaldır",
       launcherNone: "Seçilmedi",
       saved: "Kaydedildi",
-      shortcuts: "Terminalde kısayollar: Ctrl+Shift+T yeni terminal, Ctrl+Shift+W kapat, Ctrl+Shift+C kopyala, Ctrl+V yapıştır."
+      shortcuts: "Terminalde kısayollar: Ctrl+Shift+T yeni terminal, Ctrl+Shift+W kapat, Ctrl+Shift+C kopyala, Ctrl+V yapıştır.",
+      tileCaption: "Term",
+      tileSub: "açık",
+      tileLabelOpen: "Terminal, {count} açık",
+      tileLabelNone: "Terminal, açık yok",
+      tileLabelOffline: "Terminal, köprüye ulaşılamıyor",
+      subSetup: "Henüz kurulmadı",
+      subOffline: "Köprü çalışmıyor",
+      subAuth: "Anahtar reddedildi",
+      subCount: "{count} açık",
+      stRunning: "Çalışıyor",
+      stExited: "Bitti",
+      stFailed: "Başarısız",
+      stConnecting: "Bağlanıyor",
+      cardConnection: "Bağlantı",
+      cardTerminal: "Terminal",
+      scTitle: "Terminalde kısayollar",
+      scNew: "Yeni terminal",
+      scClose: "Terminali kapat",
+      scCopy: "Kopyala",
+      scPaste: "Yapıştır"
     }
   };
   function translate(language, key, vars) {
@@ -490,6 +530,9 @@ ${DIM}${t("lost")}${RESET}\r
   const { useRef: useRef$1, useState } = window.React;
   const FONT_SIZES = [10, 11, 12, 13, 14, 15, 16, 18, 20];
   const SCROLLBACK = [1e3, 5e3, 1e4, 2e4, 5e4];
+  function Icon$1({ name }) {
+    return /* @__PURE__ */ window.React.createElement("span", { className: "material-symbols-outlined", "aria-hidden": "true" }, name);
+  }
   function createSettingsPanel(manager2) {
     return function SettingsPanel2() {
       const t = useT();
@@ -527,7 +570,9 @@ ${DIM}${t("lost")}${RESET}\r
         event.target.value = "";
       };
       const shells = manager2.connection.info?.shells ?? [];
-      return /* @__PURE__ */ window.React.createElement("div", { className: "kt-settings" }, /* @__PURE__ */ window.React.createElement("h4", null, t("settingsTitle")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-token" }, t("token")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement(
+      const sizes = [["s", "sizeS"], ["m", "sizeM"], ["l", "sizeL"]];
+      const shortcuts = [["Ctrl+Shift+T", "scNew"], ["Ctrl+Shift+W", "scClose"], ["Ctrl+Shift+C", "scCopy"], ["Ctrl+V", "scPaste"]];
+      return /* @__PURE__ */ window.React.createElement("div", { className: "kt-settings" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-head" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-tile" }, /* @__PURE__ */ window.React.createElement(Icon$1, { name: "terminal" })), /* @__PURE__ */ window.React.createElement("div", { className: "kt-titles" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-title" }, t("settingsTitle")))), /* @__PURE__ */ window.React.createElement("section", { className: "kt-card" }, /* @__PURE__ */ window.React.createElement("h4", null, t("cardConnection")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-token" }, t("token")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row", style: { flexWrap: "nowrap" } }, /* @__PURE__ */ window.React.createElement(
         "input",
         {
           id: "kt-token",
@@ -538,7 +583,7 @@ ${DIM}${t("lost")}${RESET}\r
           value: config.token,
           onChange: (event) => update({ token: event.target.value })
         }
-      ), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => setShowToken((v) => !v) }, showToken ? t("hide") : t("show"))), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("tokenHint"))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-port" }, t("port")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement(
+      ), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn kt-tonal", "aria-label": showToken ? t("hide") : t("show"), title: showToken ? t("hide") : t("show"), onClick: () => setShowToken((v) => !v) }, /* @__PURE__ */ window.React.createElement(Icon$1, { name: showToken ? "visibility_off" : "visibility" }))), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("tokenHint"))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-port" }, t("port")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row", style: { flexWrap: "nowrap" } }, /* @__PURE__ */ window.React.createElement(
         "input",
         {
           id: "kt-port",
@@ -548,9 +593,20 @@ ${DIM}${t("lost")}${RESET}\r
           max: 65535,
           value: portDraft,
           onChange: (event) => setPortDraft(event.target.value),
-          onBlur: commitPort
+          onBlur: commitPort,
+          style: { fontVariantNumeric: "tabular-nums" }
         }
-      ), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", disabled: !config.token || test?.tone === "busy", onClick: runTest }, t("test"))), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("portHint")), test ? /* @__PURE__ */ window.React.createElement("span", { className: "kt-status", role: "status", "data-tone": test.tone }, test.text) : null), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-shell" }, t("shell")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-shell", value: config.shell, onChange: (event) => update({ shell: event.target.value }) }, /* @__PURE__ */ window.React.createElement("option", { value: "" }, t("shellAuto")), shells.map((shell) => /* @__PURE__ */ window.React.createElement("option", { key: shell.id, value: shell.id }, shell.name)), config.shell && !shells.some((s) => s.id === config.shell) ? /* @__PURE__ */ window.React.createElement("option", { value: config.shell }, config.shell) : null)), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-font" }, t("fontSize")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-font", value: config.fontSize, onChange: (event) => update({ fontSize: Number(event.target.value) }) }, FONT_SIZES.map((size) => /* @__PURE__ */ window.React.createElement("option", { key: size, value: size }, size)))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-size" }, t("size")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-size", value: config.size, onChange: (event) => update({ size: event.target.value }) }, /* @__PURE__ */ window.React.createElement("option", { value: "s" }, t("sizeS")), /* @__PURE__ */ window.React.createElement("option", { value: "m" }, t("sizeM")), /* @__PURE__ */ window.React.createElement("option", { value: "l" }, t("sizeL")))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-scrollback" }, t("scrollback")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-scrollback", value: config.scrollback, onChange: (event) => update({ scrollback: Number(event.target.value) }) }, [.../* @__PURE__ */ new Set([...SCROLLBACK, config.scrollback])].sort((a, b) => a - b).map((n) => /* @__PURE__ */ window.React.createElement("option", { key: n, value: n }, n))))), /* @__PURE__ */ window.React.createElement("label", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement("input", { type: "checkbox", checked: config.cursorBlink, onChange: (event) => update({ cursorBlink: event.target.checked }) }), /* @__PURE__ */ window.React.createElement("span", null, t("cursorBlink"))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("span", null, t("launcher")), /* @__PURE__ */ window.React.createElement("span", { className: "kt-path" }, config.launcherPath || t("launcherNone")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => fileRef.current?.click() }, t("launcherPick")), config.launcherPath ? /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => update({ launcherPath: DEFAULTS.launcherPath }) }, t("launcherClear")) : null, /* @__PURE__ */ window.React.createElement("input", { ref: fileRef, type: "file", accept: ".vbs,.cmd,.bat,.command,.sh", hidden: true, onChange: pickLauncher })), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("launcherHint"))), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("shortcuts")));
+      ), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", disabled: !config.token || test?.tone === "busy", onClick: runTest }, t("test"))), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("portHint")), test ? /* @__PURE__ */ window.React.createElement("span", { className: "kt-status", role: "status", "data-tone": test.tone }, /* @__PURE__ */ window.React.createElement(Icon$1, { name: test.tone === "ok" ? "check_circle" : test.tone === "error" ? "error" : "progress_activity" }), /* @__PURE__ */ window.React.createElement("span", null, test.text)) : null)), /* @__PURE__ */ window.React.createElement("section", { className: "kt-card" }, /* @__PURE__ */ window.React.createElement("h4", null, t("cardTerminal")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-shell" }, t("shell")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-shell", value: config.shell, onChange: (event) => update({ shell: event.target.value }) }, /* @__PURE__ */ window.React.createElement("option", { value: "" }, t("shellAuto")), shells.map((shell) => /* @__PURE__ */ window.React.createElement("option", { key: shell.id, value: shell.id }, shell.name)), config.shell && !shells.some((s) => s.id === config.shell) ? /* @__PURE__ */ window.React.createElement("option", { value: config.shell }, config.shell) : null)), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("span", { id: "kt-size-label" }, t("size")), /* @__PURE__ */ window.React.createElement("div", { id: "kt-size", className: "kt-seg", role: "radiogroup", "aria-labelledby": "kt-size-label" }, sizes.map(([value, key]) => /* @__PURE__ */ window.React.createElement("button", { key: value, type: "button", role: "radio", "aria-checked": config.size === value, onClick: () => update({ size: value }) }, config.size === value ? /* @__PURE__ */ window.React.createElement(Icon$1, { name: "check" }) : null, /* @__PURE__ */ window.React.createElement("span", null, t(key)))))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-grid" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-font" }, t("fontSize")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-font", value: config.fontSize, onChange: (event) => update({ fontSize: Number(event.target.value) }) }, FONT_SIZES.map((size) => /* @__PURE__ */ window.React.createElement("option", { key: size, value: size }, size)))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-field" }, /* @__PURE__ */ window.React.createElement("label", { htmlFor: "kt-scrollback" }, t("scrollback")), /* @__PURE__ */ window.React.createElement("select", { id: "kt-scrollback", value: config.scrollback, onChange: (event) => update({ scrollback: Number(event.target.value) }) }, [.../* @__PURE__ */ new Set([...SCROLLBACK, config.scrollback])].sort((a, b) => a - b).map((n) => /* @__PURE__ */ window.React.createElement("option", { key: n, value: n }, n))))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-switch-row" }, /* @__PURE__ */ window.React.createElement("span", { id: "kt-blink-label" }, t("cursorBlink")), /* @__PURE__ */ window.React.createElement(
+        "button",
+        {
+          type: "button",
+          role: "switch",
+          className: "kt-switch",
+          "aria-checked": config.cursorBlink,
+          "aria-labelledby": "kt-blink-label",
+          onClick: () => update({ cursorBlink: !config.cursorBlink })
+        }
+      ))), /* @__PURE__ */ window.React.createElement("section", { className: "kt-card" }, /* @__PURE__ */ window.React.createElement("h4", null, t("launcher")), /* @__PURE__ */ window.React.createElement("span", { className: "kt-path" }, config.launcherPath || t("launcherNone")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-row" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => fileRef.current?.click() }, t("launcherPick")), config.launcherPath ? /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-chip", onClick: () => update({ launcherPath: DEFAULTS.launcherPath }) }, t("launcherClear")) : null, /* @__PURE__ */ window.React.createElement("input", { ref: fileRef, type: "file", accept: ".vbs,.cmd,.bat,.command,.sh", hidden: true, onChange: pickLauncher })), /* @__PURE__ */ window.React.createElement("span", { className: "kt-hint" }, t("launcherHint"))), /* @__PURE__ */ window.React.createElement("section", { className: "kt-card" }, /* @__PURE__ */ window.React.createElement("h4", null, t("scTitle")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-keys" }, shortcuts.map(([keys, label]) => /* @__PURE__ */ window.React.createElement("div", { key: keys, className: "kt-key-row" }, /* @__PURE__ */ window.React.createElement("span", null, t(label)), /* @__PURE__ */ window.React.createElement("kbd", null, keys))))));
     };
   }
   const xtermCss = `/**
@@ -775,70 +831,117 @@ ${DIM}${t("lost")}${RESET}\r
   const STYLE_ID = "koterminal-style";
   const CSS = `
 .kt-panel { position: absolute; display: flex; flex-direction: column; box-sizing: border-box; overflow: hidden;
-  background: var(--kb-bg-shell, var(--theme-bg-dark, #1f1f1f)); color: rgba(255, 255, 255, 0.92); border: 1px solid var(--kb-stroke-subtle, var(--theme-border, #3a3a3a));
-  border-radius: 32px; box-shadow: var(--kb-shadow-e3, 0 8px 28px rgba(0, 0, 0, 0.32)); font: 13px/20px system-ui, -apple-system, "Segoe UI", sans-serif; }
+  background: var(--kb-bg-shell, var(--theme-bg-dark, #1f1f1f)); color: var(--kb-fg-1, rgba(255, 255, 255, 0.92)); border: 1px solid var(--kb-stroke-subtle, var(--theme-border, #3a3a3a));
+  border-radius: 32px; box-shadow: var(--kb-shadow-e3, 0 8px 28px rgba(0, 0, 0, 0.32)); font: 14px/20px var(--kb-font, system-ui, -apple-system, "Segoe UI", sans-serif); }
 .kt-panel *, .kt-settings * { box-sizing: border-box; }
 .kt-panel .material-symbols-outlined, .kt-settings .material-symbols-outlined { font-family: 'Material Symbols Rounded', 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400; }
-.kt-header { flex: none; height: 60px; display: flex; align-items: center; gap: 8px; padding: 0 12px 0 16px;
-  border-bottom: 1px solid var(--kb-stroke-subtle, var(--theme-border, #3a3a3a)); }
-.kt-title { display: flex; align-items: center; gap: 10px; font-family: var(--kb-font-display, inherit); font-size: 19px; line-height: 24px; font-weight: 600; white-space: nowrap; margin-right: 4px; }
-.kt-title .material-symbols-outlined { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 24px;
-  background: var(--kb-bg-container, var(--theme-accent-glow, rgba(244, 161, 37, 0.2))); color: var(--kb-accent-text, var(--theme-primary, #f4a125)); }
+.kt-panel button, .kt-settings button { font: inherit; }
+.kt-top { flex: none; display: flex; flex-direction: column; gap: 12px; padding: 20px 20px 12px; }
+.kt-head { display: flex; align-items: center; gap: 12px; }
+.kt-tile { flex: none; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border-radius: 15px;
+  background: var(--kb-bg-container, var(--theme-accent-glow, rgba(244, 161, 37, 0.2))); color: var(--kb-accent, var(--theme-primary, #f4a125)); }
+.kt-tile .material-symbols-outlined { font-size: 24px; }
+.kt-tile.kt-xl { width: 64px; height: 64px; border-radius: 22px; }
+.kt-tile.kt-xl .material-symbols-outlined { font-size: 32px; }
+.kt-tile[data-tone="error"] { color: var(--kb-danger, #ff99a4); }
+.kt-titles { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.kt-title { font-family: var(--kb-font-display, inherit); font-size: 19px; line-height: 24px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kt-sub { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: var(--kb-fg-2, rgba(255, 255, 255, 0.68)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kt-icon-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0;
+  border: 0; border-radius: 50%; background: var(--kb-bg-inset, rgba(255, 255, 255, 0.06)); color: var(--kb-fg-1, rgba(255, 255, 255, 0.86)); cursor: pointer; }
+.kt-icon-btn.kt-tonal { background: var(--kb-bg-container, rgba(255, 255, 255, 0.1)); color: var(--kb-on-container, rgba(255, 255, 255, 0.92)); }
+.kt-icon-btn.kt-small { width: 24px; height: 24px; background: transparent; color: inherit; }
+.kt-icon-btn:hover { background: var(--kb-fill-hover, rgba(255, 255, 255, 0.1)); }
+.kt-icon-btn.kt-tonal:hover { filter: brightness(1.12); background: var(--kb-bg-container, rgba(255, 255, 255, 0.1)); }
+.kt-icon-btn .material-symbols-outlined { font-size: 20px; }
+.kt-icon-btn.kt-small .material-symbols-outlined { font-size: 16px; }
+.kt-panel button:focus-visible, .kt-panel select:focus-visible, .kt-settings button:focus-visible,
+.kt-settings input:focus-visible, .kt-settings select:focus-visible { outline: 2px solid var(--kb-accent, var(--theme-primary, #f4a125)); outline-offset: 2px; }
+.kt-tabrow { display: flex; align-items: center; gap: 8px; }
 .kt-tabs { flex: 1; min-width: 0; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--kb-bg-inset, rgba(255, 255, 255, 0.06)); overflow-x: auto; scrollbar-width: none; }
 .kt-tabs::-webkit-scrollbar { display: none; }
-.kt-tab { flex: none; display: flex; align-items: center; height: 32px; border-radius: 999px; max-width: 230px;
-  color: rgba(255, 255, 255, 0.68); }
-.kt-tab[data-active="true"] { background: var(--kb-bg-container, rgba(255, 255, 255, 0.12)); color: var(--kb-on-container, rgba(255, 255, 255, 0.92)); }
-.kt-tab-main { display: flex; align-items: center; gap: 6px; min-width: 0; height: 32px; padding: 0 6px 0 14px; border-radius: 999px; border: 0;
-  background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.kt-tab { flex: none; display: flex; align-items: center; height: 36px; border-radius: 999px; max-width: 220px; color: var(--kb-fg-2, rgba(255, 255, 255, 0.68)); }
+.kt-tab:hover { background: var(--kb-fill-hover, rgba(255, 255, 255, 0.06)); }
+.kt-tab[data-active="true"] { background: var(--kb-bg-container, rgba(255, 255, 255, 0.12)); color: var(--kb-on-container, rgba(255, 255, 255, 0.92)); font-weight: 600; }
+.kt-tab-main { display: flex; align-items: center; gap: 8px; min-width: 0; height: 36px; padding: 0 4px 0 14px; border-radius: 999px; border: 0; background: transparent; color: inherit; font-weight: inherit; cursor: pointer; }
 .kt-tab-main span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.kt-dot { flex: none; width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.46); }
-.kt-dot[data-status="running"] { background: #6ccb5f; }
-.kt-dot[data-status="exited"] { background: #fce100; }
-.kt-dot[data-status="failed"] { background: #ff99a4; }
-.kt-icon-btn { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0;
-  border: 0; border-radius: 50%; background: var(--kb-bg-container, var(--kb-bg-inset, rgba(255, 255, 255, 0.06))); color: var(--kb-on-container, rgba(255, 255, 255, 0.78)); cursor: pointer; }
-.kt-icon-btn.kt-small { width: 24px; height: 24px; background: transparent; }
-.kt-icon-btn:hover, .kt-tab-main:hover { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.92); }
-.kt-icon-btn .material-symbols-outlined { font-size: 18px; }
-.kt-icon-btn.kt-small .material-symbols-outlined { font-size: 15px; }
-.kt-panel button:focus-visible, .kt-panel select:focus-visible, .kt-settings button:focus-visible,
-.kt-settings input:focus-visible, .kt-settings select:focus-visible { outline: 2px solid var(--theme-primary, #f4a125); outline-offset: 1px; }
-.kt-shell-select { width: 28px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: transparent;
-  cursor: pointer; appearance: none; position: absolute; inset: 0; opacity: 0; }
-.kt-shell-picker { position: relative; flex: none; width: 28px; height: 36px; display: inline-flex; align-items: center;
-  justify-content: center; color: rgba(255, 255, 255, 0.68); border-radius: 50%; }
-.kt-shell-picker:hover { background: rgba(255, 255, 255, 0.06); }
-.kt-shell-picker .material-symbols-outlined { font-size: 16px; pointer-events: none; }
-.kt-body { flex: 1; min-height: 0; position: relative; padding: 10px 6px 14px 16px; background: var(--kt-term-bg, #1f1f1f); }
+.kt-tab .kt-icon-btn.kt-small { margin-right: 6px; }
+.kt-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--kb-fg-3, rgba(255, 255, 255, 0.46)); }
+.kt-dot[data-status="running"] { background: var(--kb-success, #6ccb5f); }
+.kt-dot[data-status="exited"] { background: var(--kb-warning, #fce100); }
+.kt-dot[data-status="failed"] { background: var(--kb-danger, #ff99a4); }
+.kt-dot[data-state="running"] { background: var(--kb-success, #6ccb5f); }
+.kt-dot[data-state="exited"] { background: var(--kb-warning, #fce100); }
+.kt-dot[data-state="failed"] { background: var(--kb-danger, #ff99a4); }
+.kt-split { flex: none; display: inline-flex; align-items: center; height: 44px; border-radius: 999px; background: var(--kb-bg-container, rgba(255, 255, 255, 0.1)); color: var(--kb-on-container, #fff); }
+.kt-split .kt-icon-btn { background: transparent; color: inherit; width: 40px; height: 44px; border-radius: 999px 0 0 999px; }
+.kt-split .kt-icon-btn:hover { background: var(--kb-fill-hover, rgba(255, 255, 255, 0.1)); filter: none; }
+.kt-shell-picker { position: relative; flex: none; display: inline-flex; align-items: center; justify-content: center; color: inherit; width: 32px; height: 44px; border-radius: 0 999px 999px 0; }
+.kt-shell-picker:hover { background: var(--kb-fill-hover, rgba(255, 255, 255, 0.08)); }
+.kt-shell-picker .material-symbols-outlined { font-size: 20px; pointer-events: none; }
+.kt-shell-select { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; color: transparent; cursor: pointer; appearance: none; opacity: 0; }
+.kt-body { flex: 1; min-height: 0; position: relative; margin: 0 12px 12px; padding: 12px 6px 10px 16px; border-radius: 24px; overflow: hidden; background: var(--kt-term-bg, var(--kb-bg-inset, #181818)); }
+.kt-body[data-message="true"] { padding: 0; background: transparent; overflow: auto; }
 .kt-term { width: 100%; height: 100%; }
 .kt-term .xterm { height: 100%; }
-.kt-message { height: 100%; overflow: auto; padding: 12px 10px; user-select: text; }
-.kt-message h3 { margin: 0 0 6px; font-size: 15px; line-height: 22px; font-weight: 600; }
-.kt-message p, .kt-message ol { margin: 0 0 10px; color: rgba(255, 255, 255, 0.78); }
-.kt-message ol { padding-left: 20px; }
+.kt-message { height: 100%; min-height: min-content; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 20px 32px; padding: 8px 8px 12px; user-select: text; }
+.kt-message-col { flex: 1 1 240px; max-width: 360px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.kt-message-col.kt-center { align-items: center; text-align: center; margin: 0 auto; }
+.kt-message h3 { margin: 4px 0 0; font-family: var(--kb-font-display, inherit); font-size: 17px; line-height: 24px; font-weight: 600; }
+.kt-message p { margin: 0; color: var(--kb-fg-2, rgba(255, 255, 255, 0.78)); }
 .kt-message code { font-family: "Cascadia Mono", Consolas, monospace; font-size: 12px; }
-.kt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.kt-btn { height: 40px; padding: 0 20px; border-radius: 999px; border: 0;
-  background: var(--kb-bg-container, rgba(255, 255, 255, 0.1)); color: var(--kb-on-container, rgba(255, 255, 255, 0.92)); font: inherit; cursor: pointer; }
-.kt-btn:hover { filter: brightness(1.15); }
-.kt-btn-primary { background: var(--kb-accent, var(--theme-primary, #f4a125)); color: var(--kb-on-accent, #141414); font-weight: 600; }
+.kt-steps { flex: 1 1 260px; max-width: 360px; margin: 0; padding: 16px; list-style: none; display: flex; flex-direction: column; gap: 12px; border-radius: 24px; background: var(--kb-bg-surface, rgba(255, 255, 255, 0.04)); }
+.kt-steps li { display: flex; gap: 12px; align-items: flex-start; color: var(--kb-fg-1, rgba(255, 255, 255, 0.92)); }
+.kt-step-n { flex: none; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 13px; font-weight: 700;
+  background: var(--kb-bg-container, rgba(255, 255, 255, 0.12)); color: var(--kb-on-container, #fff); font-variant-numeric: tabular-nums; }
+.kt-steps li > span:last-child { padding-top: 3px; }
+.kt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.kt-center .kt-actions { justify-content: center; }
+.kt-external { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.kt-caption { font-size: 12px; line-height: 16px; color: var(--kb-fg-2, rgba(255, 255, 255, 0.68)); }
+.kt-btn { height: 40px; padding: 0 20px; border-radius: 999px; border: 0; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;
+  background: var(--kb-bg-container, rgba(255, 255, 255, 0.1)); color: var(--kb-on-container, rgba(255, 255, 255, 0.92)); cursor: pointer; }
+.kt-btn:hover { filter: brightness(1.12); }
+.kt-btn-primary { background: var(--kb-accent, var(--theme-primary, #f4a125)); color: var(--kb-on-accent, #141414); }
 .kt-btn-primary:hover { filter: brightness(1.08); }
-.kt-btn:disabled { opacity: 0.45; cursor: default; }
-.kt-settings { display: flex; flex-direction: column; gap: 14px; color: rgba(255, 255, 255, 0.92); font-size: 13px; line-height: 20px; }
-.kt-settings h4 { margin: 0; font-family: var(--kb-font-display, inherit); font-size: 15px; font-weight: 600; }
-.kt-field { display: flex; flex-direction: column; gap: 4px; }
-.kt-field > label, .kt-field > span:first-child { font-weight: 600; }
-.kt-hint { color: rgba(255, 255, 255, 0.62); font-size: 12px; line-height: 18px; }
+.kt-btn.kt-chip { height: 32px; padding: 0 14px; border-radius: 10px; font-weight: 500; background: transparent; color: var(--kb-fg-1, rgba(255, 255, 255, 0.92)); box-shadow: inset 0 0 0 1px var(--kb-stroke-control, rgba(255, 255, 255, 0.24)); }
+.kt-btn.kt-chip:hover { filter: none; background: var(--kb-fill-hover, rgba(255, 255, 255, 0.08)); }
+.kt-btn:disabled { opacity: var(--kb-opacity-disabled, 0.5); cursor: default; filter: none; }
+.kt-progress { width: 160px; height: 4px; border-radius: 2px; overflow: hidden; background: var(--kb-ring-track, rgba(255, 255, 255, 0.14)); }
+.kt-progress > span { display: block; width: 40%; height: 100%; border-radius: 2px; background: var(--kb-accent, #f4a125); }
+.kt-settings { display: flex; flex-direction: column; gap: 16px; color: var(--kb-fg-1, rgba(255, 255, 255, 0.92)); font-size: 14px; line-height: 20px; font-family: var(--kb-font, inherit); }
+.kt-card { display: flex; flex-direction: column; gap: 16px; padding: 20px; border-radius: 24px; background: var(--kb-bg-surface, rgba(255, 255, 255, 0.04)); }
+.kt-card h4 { margin: 0; font-family: var(--kb-font-display, inherit); font-size: 15px; line-height: 20px; font-weight: 600; }
+.kt-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.kt-field > label, .kt-field > span:first-child { font-size: 12px; line-height: 16px; color: var(--kb-fg-2, rgba(255, 255, 255, 0.68)); }
+.kt-hint { color: var(--kb-fg-2, rgba(255, 255, 255, 0.62)); font-size: 12px; line-height: 18px; }
 .kt-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.kt-input, .kt-settings select { height: 40px; padding: 0 14px; border-radius: 16px; border: 1px solid transparent;
-  background: var(--kb-bg-inset, rgba(0, 0, 0, 0.25)); color: rgba(255, 255, 255, 0.92); font: inherit; }
-.kt-input { flex: 1; min-width: 160px; }
-.kt-input[type="number"] { flex: none; width: 110px; min-width: 0; }
-.kt-status { font-size: 12px; line-height: 18px; }
-.kt-status[data-tone="ok"] { color: #6ccb5f; }
-.kt-status[data-tone="error"] { color: #ff99a4; }
-.kt-path { font-family: "Cascadia Mono", Consolas, monospace; font-size: 12px; color: rgba(255, 255, 255, 0.78); word-break: break-all; }
+.kt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.kt-input, .kt-settings select { height: 44px; padding: 0 16px; border-radius: 16px; border: 1px solid transparent; width: 100%;
+  background: var(--kb-bg-inset, rgba(0, 0, 0, 0.25)); color: var(--kb-fg-1, rgba(255, 255, 255, 0.92)); font: inherit; }
+.kt-input { flex: 1; min-width: 0; }
+.kt-input[type="number"] { flex: none; width: 120px; }
+.kt-settings select { appearance: none; padding-right: 36px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--kb-fg-2, #aaa) 50%), linear-gradient(135deg, var(--kb-fg-2, #aaa) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 19px, calc(100% - 15px) 19px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+.kt-status { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; padding: 10px 14px; border-radius: 16px; background: var(--kb-bg-inset, rgba(0, 0, 0, 0.2)); }
+.kt-status .material-symbols-outlined { font-size: 18px; flex: none; }
+.kt-status[data-tone="ok"] .material-symbols-outlined { color: var(--kb-success, #6ccb5f); }
+.kt-status[data-tone="error"] .material-symbols-outlined { color: var(--kb-danger, #ff99a4); }
+.kt-path { font-family: "Cascadia Mono", Consolas, monospace; font-size: 12px; color: var(--kb-fg-1, rgba(255, 255, 255, 0.78)); word-break: break-all; padding: 10px 14px; border-radius: 16px; background: var(--kb-bg-inset, rgba(0, 0, 0, 0.2)); }
+.kt-seg { display: flex; gap: 4px; padding: 4px; border-radius: 16px; background: var(--kb-bg-inset, rgba(0, 0, 0, 0.25)); }
+.kt-seg button { flex: 1; height: 36px; border: 0; border-radius: 12px; background: transparent; color: var(--kb-fg-2, rgba(255, 255, 255, 0.68)); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.kt-seg button[aria-checked="true"] { background: var(--kb-bg-container, rgba(255, 255, 255, 0.12)); color: var(--kb-on-container, #fff); font-weight: 600; }
+.kt-seg .material-symbols-outlined { font-size: 16px; color: var(--kb-accent, #f4a125); }
+.kt-switch-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+.kt-switch { flex: none; position: relative; width: 52px; height: 32px; padding: 0; border: 0; border-radius: 16px; cursor: pointer; background: var(--kb-bg-inset, rgba(0, 0, 0, 0.3)); box-shadow: inset 0 0 0 2px var(--kb-stroke-control, rgba(255, 255, 255, 0.3)); }
+.kt-switch::after { content: ""; position: absolute; top: 8px; left: 8px; width: 16px; height: 16px; border-radius: 50%; background: var(--kb-fg-2, #aaa); transition: all 100ms var(--kb-ease-standard, ease); }
+.kt-switch[aria-checked="true"] { background: var(--kb-accent, #f4a125); box-shadow: none; }
+.kt-switch[aria-checked="true"]::after { top: 4px; left: 24px; width: 24px; height: 24px; background: var(--kb-on-accent, #141414); }
+.kt-keys { display: flex; flex-direction: column; gap: 8px; }
+.kt-key-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.kt-key-row kbd { font: 600 12px/16px "Cascadia Mono", Consolas, monospace; padding: 4px 8px; border-radius: 8px; background: var(--kb-bg-inset, rgba(0, 0, 0, 0.25)); color: var(--kb-fg-1, #fff); }
+@media (prefers-reduced-motion: reduce) { .kt-switch::after { transition: none; } }
 `;
   function injectStyles() {
     let style = document.getElementById(STYLE_ID);
@@ -6952,7 +7055,7 @@ WARNING: This link could potentially be dangerous`)) {
     const css = (name, fallback) => style?.getPropertyValue(name).trim() || fallback;
     const accent = css("--theme-primary", "#f4a125");
     return {
-      background: css("--theme-bg-dark", "#1f1f1f"),
+      background: css("--kb-bg-inset", css("--theme-bg-dark", "#181818")),
       foreground: "#e8e8e8",
       cursor: accent,
       cursorAccent: "#141414",
@@ -7036,11 +7139,11 @@ WARNING: This link could potentially be dangerous`)) {
   function ExternalButtons({ t }) {
     const list = externalTerminals();
     if (list.length === 0) return null;
-    return /* @__PURE__ */ window.React.createElement(window.React.Fragment, null, /* @__PURE__ */ window.React.createElement("p", null, t("external")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions" }, list.map((item) => /* @__PURE__ */ window.React.createElement("button", { key: item.path, type: "button", className: "kt-btn", onClick: () => window.api?.launchFile?.(item.path) }, item.label))));
+    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-external" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-caption" }, t("external")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions", style: { marginTop: 0 } }, list.map((item) => /* @__PURE__ */ window.React.createElement("button", { key: item.path, type: "button", className: "kt-btn kt-chip", onClick: () => window.api?.launchFile?.(item.path) }, item.label))));
   }
   const openSettings = () => window.useAppStore.getState().openPluginsTab?.();
   function SetupView({ t }) {
-    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("h3", null, t("setupTitle")), /* @__PURE__ */ window.React.createElement("p", null, t("setupBody")), /* @__PURE__ */ window.React.createElement("ol", null, /* @__PURE__ */ window.React.createElement("li", null, t("setupStep1")), /* @__PURE__ */ window.React.createElement("li", null, t("setupStep2")), /* @__PURE__ */ window.React.createElement("li", null, t("setupStep3"))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", onClick: openSettings }, t("openSettings")), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => window.api?.openExternal?.(README_URL) }, t("setupGuide"))), /* @__PURE__ */ window.React.createElement(ExternalButtons, { t }));
+    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-message-col" }, /* @__PURE__ */ window.React.createElement("h3", null, t("setupTitle")), /* @__PURE__ */ window.React.createElement("p", null, t("setupBody")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", onClick: openSettings }, t("openSettings")), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: () => window.api?.openExternal?.(README_URL) }, t("setupGuide"))), /* @__PURE__ */ window.React.createElement(ExternalButtons, { t })), /* @__PURE__ */ window.React.createElement("ol", { className: "kt-steps" }, [1, 2, 3].map((n) => /* @__PURE__ */ window.React.createElement("li", { key: n }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-step-n" }, n), /* @__PURE__ */ window.React.createElement("span", null, t(`setupStep${n}`))))));
   }
   function ProblemView({ t, manager: manager2, config, kind }) {
     const retry = () => manager2.checkConnection().then((result) => {
@@ -7050,7 +7153,18 @@ WARNING: This link could potentially be dangerous`)) {
       window.api?.launchFile?.(config.launcherPath);
       setTimeout(retry, 2500);
     };
-    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("h3", null, t(kind === "auth" ? "authTitle" : "unreachableTitle")), /* @__PURE__ */ window.React.createElement("p", null, kind === "auth" ? t("authBody") : t("unreachableBody", { port: config.port })), kind !== "auth" && window.location.protocol.startsWith("http") ? /* @__PURE__ */ window.React.createElement("p", null, t("devOrigin", { origin: window.location.origin })) : null, /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", onClick: retry }, t("retry")), kind !== "auth" && config.launcherPath ? /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: startBridge }, t("startBridge")) : null, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: openSettings }, t("openSettings"))), /* @__PURE__ */ window.React.createElement(ExternalButtons, { t }));
+    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-message-col kt-center" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-tile kt-xl", "data-tone": "error" }, /* @__PURE__ */ window.React.createElement(Icon, { name: kind === "auth" ? "key_off" : "link_off" })), /* @__PURE__ */ window.React.createElement("h3", null, t(kind === "auth" ? "authTitle" : "unreachableTitle")), /* @__PURE__ */ window.React.createElement("p", null, kind === "auth" ? t("authBody") : t("unreachableBody", { port: config.port })), kind !== "auth" && window.location.protocol.startsWith("http") ? /* @__PURE__ */ window.React.createElement("p", { className: "kt-caption" }, t("devOrigin", { origin: window.location.origin })) : null, /* @__PURE__ */ window.React.createElement("div", { className: "kt-actions" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn kt-btn-primary", onClick: retry }, t("retry")), kind !== "auth" && config.launcherPath ? /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: startBridge }, t("startBridge")) : null, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-btn", onClick: openSettings }, t("openSettings"))), /* @__PURE__ */ window.React.createElement(ExternalButtons, { t })));
+  }
+  function ConnectingView({ t }) {
+    return /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-message-col kt-center" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-tile kt-xl" }, /* @__PURE__ */ window.React.createElement(Icon, { name: "terminal" })), /* @__PURE__ */ window.React.createElement("p", null, t("connecting")), /* @__PURE__ */ window.React.createElement("div", { className: "kt-progress", role: "progressbar", "aria-label": t("connecting") }, /* @__PURE__ */ window.React.createElement("span", null))));
+  }
+  function statusOf(t, config, connection, sessions, active) {
+    if (!config.token) return { state: "setup", text: t("subSetup") };
+    if (sessions.length === 0 && connection.status === "unreachable") return { state: "failed", text: t("subOffline") };
+    if (sessions.length === 0 && connection.status === "auth-failed") return { state: "failed", text: t("subAuth") };
+    if (sessions.length === 0) return { state: "connecting", text: t("stConnecting") };
+    const key = active?.status === "running" ? "stRunning" : active?.status === "exited" ? "stExited" : active?.status === "failed" ? "stFailed" : "stConnecting";
+    return { state: active?.status ?? "connecting", text: `${t(key)} · ${t("subCount", { count: sessions.length })}` };
   }
   function createTerminalPanel(manager2) {
     return function TerminalPanel2({ onClose }) {
@@ -7107,8 +7221,12 @@ WARNING: This link could potentially be dangerous`)) {
       if (!config.token) message = /* @__PURE__ */ window.React.createElement(SetupView, { t });
       else if (sessions.length === 0 && connection.status === "unreachable") message = /* @__PURE__ */ window.React.createElement(ProblemView, { t, manager: manager2, config, kind: "unreachable" });
       else if (sessions.length === 0 && connection.status === "auth-failed") message = /* @__PURE__ */ window.React.createElement(ProblemView, { t, manager: manager2, config, kind: "auth" });
-      else if (sessions.length === 0) message = /* @__PURE__ */ window.React.createElement("div", { className: "kt-message" }, /* @__PURE__ */ window.React.createElement("p", null, t("connecting")));
-      return /* @__PURE__ */ window.React.createElement("div", { ref: rootRef, className: "kt-panel pointer-events-auto no-drag-region", style: placement(edge, PANEL_SIZES[config.size]) }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-header" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-title" }, /* @__PURE__ */ window.React.createElement(Icon, { name: "terminal" }), /* @__PURE__ */ window.React.createElement("span", null, t("title"))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-tabs", role: "tablist", "aria-label": t("title") }, sessions.map((session) => /* @__PURE__ */ window.React.createElement("div", { key: session.id, className: "kt-tab", role: "presentation", "data-active": session.id === manager2.activeId }, /* @__PURE__ */ window.React.createElement(
+      else if (sessions.length === 0) message = /* @__PURE__ */ window.React.createElement(ConnectingView, { t });
+      const status = statusOf(t, config, connection, sessions, active);
+      const closeOnEscape = (event) => {
+        if (event.key === "Escape") onClose?.();
+      };
+      return /* @__PURE__ */ window.React.createElement("div", { ref: rootRef, className: "kt-panel pointer-events-auto no-drag-region", style: placement(edge, PANEL_SIZES[config.size]) }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-top", onKeyDown: closeOnEscape }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-head" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-tile", "data-tone": status.state === "failed" ? "error" : void 0 }, /* @__PURE__ */ window.React.createElement(Icon, { name: "terminal" })), /* @__PURE__ */ window.React.createElement("div", { className: "kt-titles" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-title" }, t("title")), /* @__PURE__ */ window.React.createElement("span", { className: "kt-sub" }, /* @__PURE__ */ window.React.createElement("span", { className: "kt-dot", "data-state": status.state }), /* @__PURE__ */ window.React.createElement("span", null, status.text))), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn kt-tonal", "aria-label": t("openSettings"), title: t("openSettings"), onClick: openSettings }, /* @__PURE__ */ window.React.createElement(Icon, { name: "tune" })), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn kt-tonal", "aria-label": t("closePanel"), title: t("closePanel"), onClick: onClose }, /* @__PURE__ */ window.React.createElement(Icon, { name: "close" }))), config.token && (sessions.length > 0 || connection.status === "ok") ? /* @__PURE__ */ window.React.createElement("div", { className: "kt-tabrow" }, /* @__PURE__ */ window.React.createElement("div", { className: "kt-tabs", role: "tablist", "aria-label": t("title") }, sessions.map((session) => /* @__PURE__ */ window.React.createElement("div", { key: session.id, className: "kt-tab", role: "presentation", "data-active": session.id === manager2.activeId }, /* @__PURE__ */ window.React.createElement(
         "button",
         {
           type: "button",
@@ -7130,7 +7248,7 @@ WARNING: This link could potentially be dangerous`)) {
           onClick: () => manager2.closeSession(session.id)
         },
         /* @__PURE__ */ window.React.createElement(Icon, { name: "close" })
-      )))), config.token ? /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn", "aria-label": t("newTab"), title: t("newTab"), onClick: () => manager2.createSession() }, /* @__PURE__ */ window.React.createElement(Icon, { name: "add" })) : null, config.token && shells.length > 1 ? /* @__PURE__ */ window.React.createElement("label", { className: "kt-shell-picker", title: t("newTabWith") }, /* @__PURE__ */ window.React.createElement(Icon, { name: "expand_more" }), /* @__PURE__ */ window.React.createElement(
+      )))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-split" }, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn", "aria-label": t("newTab"), title: t("newTab"), onClick: () => manager2.createSession() }, /* @__PURE__ */ window.React.createElement(Icon, { name: "add" })), shells.length > 1 ? /* @__PURE__ */ window.React.createElement("label", { className: "kt-shell-picker", title: t("newTabWith") }, /* @__PURE__ */ window.React.createElement(Icon, { name: "expand_more" }), /* @__PURE__ */ window.React.createElement(
         "select",
         {
           className: "kt-shell-select",
@@ -7142,7 +7260,7 @@ WARNING: This link could potentially be dangerous`)) {
         },
         /* @__PURE__ */ window.React.createElement("option", { value: "" }, t("newTabWith")),
         shells.map((shell) => /* @__PURE__ */ window.React.createElement("option", { key: shell.id, value: shell.id }, shell.name))
-      )) : null, /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn", "aria-label": t("openSettings"), title: t("openSettings"), onClick: openSettings }, /* @__PURE__ */ window.React.createElement(Icon, { name: "settings" })), /* @__PURE__ */ window.React.createElement("button", { type: "button", className: "kt-icon-btn", "aria-label": t("closePanel"), title: t("closePanel"), onClick: onClose }, /* @__PURE__ */ window.React.createElement(Icon, { name: "close" }))), /* @__PURE__ */ window.React.createElement("div", { className: "kt-body" }, message, /* @__PURE__ */ window.React.createElement("div", { ref: hostRef, style: { display: message ? "none" : "block", width: "100%", height: "100%" } })));
+      )) : null)) : null), /* @__PURE__ */ window.React.createElement("div", { className: "kt-body", "data-message": message ? "true" : "false", onKeyDown: message ? closeOnEscape : void 0 }, message, /* @__PURE__ */ window.React.createElement("div", { ref: hostRef, style: { display: message ? "none" : "block", width: "100%", height: "100%" } })));
     };
   }
   const { KoBarExtensions, useAppStore } = window;
@@ -7164,6 +7282,7 @@ WARNING: This link could potentially be dangerous`)) {
     id: PLUGIN_ID,
     icon: "terminal",
     label: translate(currentLanguage(), "name"),
+    tile: { template: "value-caption", sensitive: false },
     onClick: (_event, anchorRect) => {
       const store = useAppStore.getState();
       const isOpen = store.activeExtensionPanelId === PLUGIN_ID;
@@ -7171,6 +7290,35 @@ WARNING: This link could potentially be dangerous`)) {
       if (!isOpen) useAppStore.setState({ activeExtensionPanelId: PLUGIN_ID, activeExtensionAnchorRect: anchorRect });
     }
   });
+  const pushTile = () => {
+    if (typeof KoBarExtensions.setBarItemState !== "function") return;
+    try {
+      const t = (key, vars) => translate(currentLanguage(), key, vars);
+      const count = manager.sessions.length;
+      const offline = Boolean(readConfig().token) && count === 0 && ["unreachable", "auth-failed"].includes(manager.connection.status);
+      KoBarExtensions.setBarItemState(PLUGIN_ID, {
+        label: offline ? t("tileLabelOffline") : count > 0 ? t("tileLabelOpen", { count }) : t("tileLabelNone"),
+        caption: t("tileCaption"),
+        value: count > 0 ? String(count) : "–",
+        sub: t("tileSub"),
+        tone: offline ? "error" : "default"
+      });
+    } catch {
+    }
+  };
+  if (typeof KoBarExtensions.setBarItemState === "function") {
+    pushTile();
+    manager.subscribe(pushTile);
+    let lastLanguage = currentLanguage();
+    useAppStore.subscribe(() => {
+      const language = currentLanguage();
+      if (language !== lastLanguage) {
+        lastLanguage = language;
+        pushTile();
+      }
+    });
+    if (typeof KoBarExtensions.onBarItemChange === "function") KoBarExtensions.onBarItemChange(PLUGIN_ID, pushTile);
+  }
   KoBarExtensions.registerPanel(PLUGIN_ID, { id: PLUGIN_ID, render: (props) => /* @__PURE__ */ window.React.createElement(TerminalPanel, { ...props }) });
   KoBarExtensions.registerSettingsPanel(PLUGIN_ID, { id: PLUGIN_ID, render: () => /* @__PURE__ */ window.React.createElement(SettingsPanel, null) });
 })();

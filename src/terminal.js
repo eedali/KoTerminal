@@ -11,7 +11,7 @@ export function readTheme(element) {
     const css = (name, fallback) => style?.getPropertyValue(name).trim() || fallback;
     const accent = css('--theme-primary', '#f4a125');
     return {
-        background: css('--theme-bg-dark', '#1f1f1f'),
+        background: css('--kb-bg-inset', css('--theme-bg-dark', '#181818')),
         foreground: '#e8e8e8',
         cursor: accent,
         cursorAccent: '#141414',

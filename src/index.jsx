@@ -34,6 +34,7 @@ KoBarExtensions.registerSidebarButton({
     id: PLUGIN_ID,
     icon: 'terminal',
     label: translate(currentLanguage(), 'name'),
+    tile: { template: 'value-caption', sensitive: false },
     onClick: (_event, anchorRect) => {
         const store = useAppStore.getState();
         const isOpen = store.activeExtensionPanelId === PLUGIN_ID;
@@ -41,6 +42,38 @@ KoBarExtensions.registerSidebarButton({
         if (!isOpen) useAppStore.setState({ activeExtensionPanelId: PLUGIN_ID, activeExtensionAnchorRect: anchorRect });
     },
 });
+
+// Bar tile: how many terminals are open. Feature-detected; old hosts without the tile API keep the plain icon button.
+const pushTile = () => {
+    if (typeof KoBarExtensions.setBarItemState !== 'function') return;
+    try {
+        const t = (key, vars) => translate(currentLanguage(), key, vars);
+        const count = manager.sessions.length;
+        const offline = Boolean(readConfig().token) && count === 0 && ['unreachable', 'auth-failed'].includes(manager.connection.status);
+        KoBarExtensions.setBarItemState(PLUGIN_ID, {
+            label: offline ? t('tileLabelOffline') : count > 0 ? t('tileLabelOpen', { count }) : t('tileLabelNone'),
+            caption: t('tileCaption'),
+            value: count > 0 ? String(count) : '–',
+            sub: t('tileSub'),
+            tone: offline ? 'error' : 'default',
+        });
+    } catch {
+        // The tile is decoration; never let it break the plugin.
+    }
+};
+if (typeof KoBarExtensions.setBarItemState === 'function') {
+    pushTile();
+    manager.subscribe(pushTile);
+    let lastLanguage = currentLanguage();
+    useAppStore.subscribe(() => {
+        const language = currentLanguage();
+        if (language !== lastLanguage) {
+            lastLanguage = language;
+            pushTile();
+        }
+    });
+    if (typeof KoBarExtensions.onBarItemChange === 'function') KoBarExtensions.onBarItemChange(PLUGIN_ID, pushTile);
+}
 
 KoBarExtensions.registerPanel(PLUGIN_ID, { id: PLUGIN_ID, render: (props) => <TerminalPanel {...props} /> });
 KoBarExtensions.registerSettingsPanel(PLUGIN_ID, { id: PLUGIN_ID, render: () => <SettingsPanel /> });

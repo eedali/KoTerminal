@@ -1,4 +1,4 @@
-// The panel next to the bar: tabs in the header (also the host's drag strip), the active terminal below.
+// The panel next to the bar: header (icon tile, title, live status), a tab row, and the active terminal in a card.
 import { PANEL_SIZES, readConfig } from './config.js';
 import { useT } from './i18n.js';
 import { readTheme } from './terminal.js';
@@ -40,16 +40,16 @@ function ExternalButtons({ t }) {
     const list = externalTerminals();
     if (list.length === 0) return null;
     return (
-        <>
-            <p>{t('external')}</p>
-            <div className="kt-actions">
+        <div className="kt-external">
+            <span className="kt-caption">{t('external')}</span>
+            <div className="kt-actions" style={{ marginTop: 0 }}>
                 {list.map((item) => (
-                    <button key={item.path} type="button" className="kt-btn" onClick={() => window.api?.launchFile?.(item.path)}>
+                    <button key={item.path} type="button" className="kt-btn kt-chip" onClick={() => window.api?.launchFile?.(item.path)}>
                         {item.label}
                     </button>
                 ))}
             </div>
-        </>
+        </div>
     );
 }
 
@@ -58,18 +58,23 @@ const openSettings = () => window.useAppStore.getState().openPluginsTab?.();
 function SetupView({ t }) {
     return (
         <div className="kt-message">
-            <h3>{t('setupTitle')}</h3>
-            <p>{t('setupBody')}</p>
-            <ol>
-                <li>{t('setupStep1')}</li>
-                <li>{t('setupStep2')}</li>
-                <li>{t('setupStep3')}</li>
-            </ol>
-            <div className="kt-actions">
-                <button type="button" className="kt-btn kt-btn-primary" onClick={openSettings}>{t('openSettings')}</button>
-                <button type="button" className="kt-btn" onClick={() => window.api?.openExternal?.(README_URL)}>{t('setupGuide')}</button>
+            <div className="kt-message-col">
+                <h3>{t('setupTitle')}</h3>
+                <p>{t('setupBody')}</p>
+                <div className="kt-actions">
+                    <button type="button" className="kt-btn kt-btn-primary" onClick={openSettings}>{t('openSettings')}</button>
+                    <button type="button" className="kt-btn" onClick={() => window.api?.openExternal?.(README_URL)}>{t('setupGuide')}</button>
+                </div>
+                <ExternalButtons t={t} />
             </div>
-            <ExternalButtons t={t} />
+            <ol className="kt-steps">
+                {[1, 2, 3].map((n) => (
+                    <li key={n}>
+                        <span className="kt-step-n">{n}</span>
+                        <span>{t(`setupStep${n}`)}</span>
+                    </li>
+                ))}
+            </ol>
         </div>
     );
 }
@@ -85,19 +90,44 @@ function ProblemView({ t, manager, config, kind }) {
     };
     return (
         <div className="kt-message">
-            <h3>{t(kind === 'auth' ? 'authTitle' : 'unreachableTitle')}</h3>
-            <p>{kind === 'auth' ? t('authBody') : t('unreachableBody', { port: config.port })}</p>
-            {kind !== 'auth' && window.location.protocol.startsWith('http') ? <p>{t('devOrigin', { origin: window.location.origin })}</p> : null}
-            <div className="kt-actions">
-                <button type="button" className="kt-btn kt-btn-primary" onClick={retry}>{t('retry')}</button>
-                {kind !== 'auth' && config.launcherPath ? (
-                    <button type="button" className="kt-btn" onClick={startBridge}>{t('startBridge')}</button>
-                ) : null}
-                <button type="button" className="kt-btn" onClick={openSettings}>{t('openSettings')}</button>
+            <div className="kt-message-col kt-center">
+                <span className="kt-tile kt-xl" data-tone="error"><Icon name={kind === 'auth' ? 'key_off' : 'link_off'} /></span>
+                <h3>{t(kind === 'auth' ? 'authTitle' : 'unreachableTitle')}</h3>
+                <p>{kind === 'auth' ? t('authBody') : t('unreachableBody', { port: config.port })}</p>
+                {kind !== 'auth' && window.location.protocol.startsWith('http') ? <p className="kt-caption">{t('devOrigin', { origin: window.location.origin })}</p> : null}
+                <div className="kt-actions">
+                    <button type="button" className="kt-btn kt-btn-primary" onClick={retry}>{t('retry')}</button>
+                    {kind !== 'auth' && config.launcherPath ? (
+                        <button type="button" className="kt-btn" onClick={startBridge}>{t('startBridge')}</button>
+                    ) : null}
+                    <button type="button" className="kt-btn" onClick={openSettings}>{t('openSettings')}</button>
+                </div>
+                <ExternalButtons t={t} />
             </div>
-            <ExternalButtons t={t} />
         </div>
     );
+}
+
+function ConnectingView({ t }) {
+    return (
+        <div className="kt-message">
+            <div className="kt-message-col kt-center">
+                <span className="kt-tile kt-xl"><Icon name="terminal" /></span>
+                <p>{t('connecting')}</p>
+                <div className="kt-progress" role="progressbar" aria-label={t('connecting')}><span /></div>
+            </div>
+        </div>
+    );
+}
+
+/** Subtitle of the header: one live fact about the bridge or the active terminal. */
+function statusOf(t, config, connection, sessions, active) {
+    if (!config.token) return { state: 'setup', text: t('subSetup') };
+    if (sessions.length === 0 && connection.status === 'unreachable') return { state: 'failed', text: t('subOffline') };
+    if (sessions.length === 0 && connection.status === 'auth-failed') return { state: 'failed', text: t('subAuth') };
+    if (sessions.length === 0) return { state: 'connecting', text: t('stConnecting') };
+    const key = active?.status === 'running' ? 'stRunning' : active?.status === 'exited' ? 'stExited' : active?.status === 'failed' ? 'stFailed' : 'stConnecting';
+    return { state: active?.status ?? 'connecting', text: `${t(key)} · ${t('subCount', { count: sessions.length })}` };
 }
 
 export function createTerminalPanel(manager) {
@@ -163,72 +193,88 @@ export function createTerminalPanel(manager) {
         if (!config.token) message = <SetupView t={t} />;
         else if (sessions.length === 0 && connection.status === 'unreachable') message = <ProblemView t={t} manager={manager} config={config} kind="unreachable" />;
         else if (sessions.length === 0 && connection.status === 'auth-failed') message = <ProblemView t={t} manager={manager} config={config} kind="auth" />;
-        else if (sessions.length === 0) message = <div className="kt-message"><p>{t('connecting')}</p></div>;
+        else if (sessions.length === 0) message = <ConnectingView t={t} />;
+
+        const status = statusOf(t, config, connection, sessions, active);
+        // Escape closes the panel from the header and the message screens; inside the terminal it belongs to the shell.
+        const closeOnEscape = (event) => {
+            if (event.key === 'Escape') onClose?.();
+        };
 
         return (
             <div ref={rootRef} className="kt-panel pointer-events-auto no-drag-region" style={placement(edge, PANEL_SIZES[config.size])}>
-                <div className="kt-header">
-                    <div className="kt-title">
-                        <Icon name="terminal" />
-                        <span>{t('title')}</span>
-                    </div>
-                    <div className="kt-tabs" role="tablist" aria-label={t('title')}>
-                        {sessions.map((session) => (
-                            <div key={session.id} className="kt-tab" role="presentation" data-active={session.id === manager.activeId}>
-                                <button
-                                    type="button"
-                                    role="tab"
-                                    aria-selected={session.id === manager.activeId}
-                                    className="kt-tab-main"
-                                    title={session.title}
-                                    onClick={() => manager.activate(session.id)}
-                                >
-                                    <span className="kt-dot" data-status={session.status} />
-                                    <span>{session.title}</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    className="kt-icon-btn kt-small"
-                                    aria-label={`${t('closeTab')}: ${session.title}`}
-                                    title={t('closeTab')}
-                                    onClick={() => manager.closeSession(session.id)}
-                                >
-                                    <Icon name="close" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    {config.token ? (
-                        <button type="button" className="kt-icon-btn" aria-label={t('newTab')} title={t('newTab')} onClick={() => manager.createSession()}>
-                            <Icon name="add" />
+                <div className="kt-top" onKeyDown={closeOnEscape}>
+                    <div className="kt-head">
+                        <span className="kt-tile" data-tone={status.state === 'failed' ? 'error' : undefined}><Icon name="terminal" /></span>
+                        <div className="kt-titles">
+                            <span className="kt-title">{t('title')}</span>
+                            <span className="kt-sub">
+                                <span className="kt-dot" data-state={status.state} />
+                                <span>{status.text}</span>
+                            </span>
+                        </div>
+                        <button type="button" className="kt-icon-btn kt-tonal" aria-label={t('openSettings')} title={t('openSettings')} onClick={openSettings}>
+                            <Icon name="tune" />
                         </button>
-                    ) : null}
-                    {config.token && shells.length > 1 ? (
-                        <label className="kt-shell-picker" title={t('newTabWith')}>
-                            <Icon name="expand_more" />
-                            <select
-                                className="kt-shell-select"
-                                aria-label={t('newTabWith')}
-                                value=""
-                                onChange={(event) => {
-                                    if (event.target.value) manager.createSession(event.target.value);
-                                }}
-                            >
-                                <option value="">{t('newTabWith')}</option>
-                                {shells.map((shell) => (
-                                    <option key={shell.id} value={shell.id}>{shell.name}</option>
+                        <button type="button" className="kt-icon-btn kt-tonal" aria-label={t('closePanel')} title={t('closePanel')} onClick={onClose}>
+                            <Icon name="close" />
+                        </button>
+                    </div>
+                    {config.token && (sessions.length > 0 || connection.status === 'ok') ? (
+                        <div className="kt-tabrow">
+                            <div className="kt-tabs" role="tablist" aria-label={t('title')}>
+                                {sessions.map((session) => (
+                                    <div key={session.id} className="kt-tab" role="presentation" data-active={session.id === manager.activeId}>
+                                        <button
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={session.id === manager.activeId}
+                                            className="kt-tab-main"
+                                            title={session.title}
+                                            onClick={() => manager.activate(session.id)}
+                                        >
+                                            <span className="kt-dot" data-status={session.status} />
+                                            <span>{session.title}</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="kt-icon-btn kt-small"
+                                            aria-label={`${t('closeTab')}: ${session.title}`}
+                                            title={t('closeTab')}
+                                            onClick={() => manager.closeSession(session.id)}
+                                        >
+                                            <Icon name="close" />
+                                        </button>
+                                    </div>
                                 ))}
-                            </select>
-                        </label>
+                            </div>
+                            <div className="kt-split">
+                                <button type="button" className="kt-icon-btn" aria-label={t('newTab')} title={t('newTab')} onClick={() => manager.createSession()}>
+                                    <Icon name="add" />
+                                </button>
+                                {shells.length > 1 ? (
+                                    <label className="kt-shell-picker" title={t('newTabWith')}>
+                                        <Icon name="expand_more" />
+                                        <select
+                                            className="kt-shell-select"
+                                            aria-label={t('newTabWith')}
+                                            value=""
+                                            onChange={(event) => {
+                                                if (event.target.value) manager.createSession(event.target.value);
+                                            }}
+                                        >
+                                            <option value="">{t('newTabWith')}</option>
+                                            {shells.map((shell) => (
+                                                <option key={shell.id} value={shell.id}>{shell.name}</option>
+                                            ))}
+                                        </select>
+                                    </label>
+                                ) : null}
+                            </div>
+                        </div>
                     ) : null}
-                    <button type="button" className="kt-icon-btn" aria-label={t('openSettings')} title={t('openSettings')} onClick={openSettings}>
-                        <Icon name="settings" />
-                    </button>
-                    <button type="button" className="kt-icon-btn" aria-label={t('closePanel')} title={t('closePanel')} onClick={onClose}>
-                        <Icon name="close" />
-                    </button>
                 </div>
-                <div className="kt-body">
+                <div className="kt-body" data-message={message ? 'true' : 'false'} onKeyDown={message ? closeOnEscape : undefined}>
                     {message}
                     <div ref={hostRef} style={{ display: message ? 'none' : 'block', width: '100%', height: '100%' }} />
                 </div>

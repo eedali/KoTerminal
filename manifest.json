@@ -13,7 +13,7 @@
     "languages": ["en", "tr"],
     "versionNote": "First release: xterm.js terminal panel with tabs, settings and the KoTerminal bridge.",
     "bar": {
-        "tile": { "sensitive": false },
+        "tile": { "template": "value-caption", "sensitive": false },
         "defaultSize": "icon"
     }
 }
