@@ -1,7 +1,7 @@
 {
     "id": "com.eedali.koterminal",
     "name": "KoTerminal",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A real terminal in a KoBar panel: tabs, PowerShell, Command Prompt, Git Bash, WSL, zsh or bash, through a small local bridge that only listens on 127.0.0.1.",
     "author": "Ekrem EDALI",
     "entry": "dist/index.js",
@@ -11,7 +11,7 @@
     "githubRepo": "eedali/KoTerminal",
     "minAppVersion": "1.4.0",
     "languages": ["en", "tr"],
-    "versionNote": "First release: xterm.js terminal panel with tabs, settings and the KoTerminal bridge.",
+    "versionNote": "New design for KoBar 1.5: redesigned terminal panel and settings; the bar tile shows how many terminals are open.",
     "bar": {
         "tile": { "template": "value-caption", "sensitive": false },
         "defaultSize": "icon"
